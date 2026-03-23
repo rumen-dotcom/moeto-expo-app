@@ -1,0 +1,43 @@
+name: Build Expo APK
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Изтегляне на кода
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Инсталиране на Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: 📦 Инсталиране на зависимости (npm install)
+        run: npm install
+
+      - name: 🏗️ Генериране на Android папка (Expo Prebuild)
+        run: npx expo prebuild --platform android
+
+      - name: ☕ Инсталиране на Java (за компилацията)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: 🔨 Компилиране на APK файла
+        run: |
+          cd android
+          ./gradlew assembleRelease
+
+      - name: 🚀 Качване на готовия APK файл
+        uses: actions/upload-artifact@v4
+        with:
+          name: Moeto-Prilojenie-APK
+          path: android/app/build/outputs/apk/release/app-release.apk
