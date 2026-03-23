@@ -10,6 +10,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    # Това е тайната съставка - казваме му да влезе в папката!
+    defaults:
+      run:
+        working-directory: ./android-controller
+
     steps:
       - name: 📥 Изтегляне на кода
         uses: actions/checkout@v4
@@ -40,4 +45,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Moeto-Prilojenie-APK
-          path: android/app/build/outputs/apk/release/app-release.apk
+          # Тук също обновихме пътя, за да знае откъде да вземе готовия файл
+          path: android-controller/android/app/build/outputs/apk/release/app-release.apk
